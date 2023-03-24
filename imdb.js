@@ -95,7 +95,6 @@ async function fill_category(api, category) {
             throw Error(response.statusText);
         }
     }).then(data => {
-        console.log(data.result);
         return data.results
     })
         .catch(error => showNotification(error));
@@ -156,7 +155,6 @@ function handleClickListener(event) {
         fill_list();
         return;
     }
-    console.log(target.dataset.id)
 }
 // search ************************************
 function searchFunction() {
