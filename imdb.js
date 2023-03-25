@@ -46,13 +46,21 @@ function create_and_append(category, title, id, date, path) {
 // appeend in Favorite_list and WatchList *********************************************
 async function create_and_append_list(pass, element) {
     var api_movie_id = `https://api.themoviedb.org/3/movie/${pass}?${API_KEY}`;
-    var result = await fetch(api_movie_id).then(response => response.json()).catch(error => console.log(error + ` in ${pass} id`));
-    
-    if (result == undefined){
-        localStorage.removeItem(pass); // jab fetch nahi ho pa rha to remove kr diya
+    var result = await fetch(api_movie_id).then(response => {
+
+        if (response.status >= 200 && response.status <= 299) {
+            return response.json();
+        } else {
+            console.log(response.statusText + ` in ${pass} id`)
+        }
+    })
+
+    if (result == undefined)
         return;
-    } 
+
+    localStorage.setItem(`${pass}`, element === WatchList ? "W" : "F");
     var child = document.createElement('div');
+
     child.className = "list";
     child.innerHTML = `
                  <div class="list_image">
@@ -86,7 +94,7 @@ async function fill_the_details(pass) {
             </div>
         `;
     document.querySelector(".container").append(child);
-    console.log("Movie ID : "+ queryString +" ,  Movie Name: " + result.title );
+    console.log("Movie ID : " + queryString + " ,  Movie Name: " + result.title);
     return;
 }
 //  fill category like top_movie tv etc********************************************
@@ -131,7 +139,6 @@ async function append_list(pass, element) {
         return;
     }
     create_and_append_list(pass, element);
-    localStorage.setItem(`${pass}`, element === WatchList ? "W" : "F");
 }
 
 
@@ -204,7 +211,6 @@ async function initialising() {
     await fill_category(api_top_rated_tv_shows, top_rated_tv_Shows);
     await fill_list();
 }
-
 
 // check is home or movie detail page*************************************************
 var queryString = location.search.substring(1);
