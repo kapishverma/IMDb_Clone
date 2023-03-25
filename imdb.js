@@ -46,7 +46,12 @@ function create_and_append(category, title, id, date, path) {
 // appeend in Favorite_list and WatchList *********************************************
 async function create_and_append_list(pass, element) {
     var api_movie_id = `https://api.themoviedb.org/3/movie/${pass}?${API_KEY}`;
-    var result = await fetch(api_movie_id).then(response => response.json());
+    var result = await fetch(api_movie_id).then(response => response.json()).catch(error => console.log(error + ` in ${pass} id`));
+    
+    if (result == undefined){
+        localStorage.removeItem(pass); // jab fetch nahi ho pa rha to remove kr diya
+        return;
+    } 
     var child = document.createElement('div');
     child.className = "list";
     child.innerHTML = `
@@ -65,8 +70,6 @@ async function fill_the_details(pass) {
         .then(response => response.json())
         .catch(error => showNotification(error + " SORRY  :-("));
 
-    console.log(result);
-
     var child = document.createElement("div");
     child.className = "full_details";
     // to rotate image if screen width is small
@@ -83,6 +86,7 @@ async function fill_the_details(pass) {
             </div>
         `;
     document.querySelector(".container").append(child);
+    console.log("Movie ID : "+ queryString +" ,  Movie Name: " + result.title );
     return;
 }
 //  fill category like top_movie tv etc********************************************
@@ -94,11 +98,11 @@ async function fill_category(api, category) {
         } else {
             throw Error(response.statusText);
         }
-    }).then(data => {
-        return data.results
-    })
-        .catch(error => showNotification(error));
+    }).then(data => data.results).catch(error => showNotification(error));
 
+    if (result == undefined) {
+        return;
+    }
 
     if (category == popular_movies || category == top_rated_movies || category == search_result) {
         for (let i = 0; i < result.length; i++) {
@@ -122,8 +126,8 @@ async function append_list(pass, element) {
         showNotification("Unable to fetch from API,ERROR SORRY!!");
         return;
     }
-    if (localStorage.getItem(pass) != null) {  // to check , is item already exist in Favorite_list or WatchList
-        console.log(`Selected item is already exist in ${localStorage.getItem(pass)}. First, delete from there and then select again`);
+    if (localStorage.getItem(pass) != null) {  //  is item already exist in Favorite_list or WatchList?
+        console.log(`Selected item is already exist in ${localStorage.getItem(pass) == 'W' ? "Watchlist" : "Favorite List"}. First, delete from there and then select again`);
         return;
     }
     create_and_append_list(pass, element);
@@ -134,7 +138,10 @@ async function append_list(pass, element) {
 // initialising Favorite_list and WatchList*******************************************
 function fill_list() {
     for (let i = 0; i < localStorage.length; i++) {
-        create_and_append_list(localStorage.key(i), localStorage.getItem(localStorage.key(i)) === "W" ? WatchList : Favorite_list);
+        var pass = localStorage.getItem(localStorage.key(i));
+        if (pass === 'W' || pass === 'F') { // same local storage is sharing data with alarm clock as well( to seperate them, this if condition)
+            create_and_append_list(localStorage.key(i), pass === "W" ? WatchList : Favorite_list);
+        }
     }
 }
 
@@ -159,7 +166,7 @@ function handleClickListener(event) {
 // search ************************************
 function searchFunction() {
     search_result.innerHTML = "";
-    fill_category(api_search + input.value , search_result);
+    fill_category(api_search + input.value, search_result);
 }
 
 input.addEventListener('click', () => {
@@ -200,9 +207,8 @@ async function initialising() {
 
 
 // check is home or movie detail page*************************************************
-var queryString = location.search.substring(1); 
+var queryString = location.search.substring(1);
 if (queryString !== "") {  // means movie page
-    console.log(queryString);
     fill_the_details(queryString);
     fill_list();
 } else {
