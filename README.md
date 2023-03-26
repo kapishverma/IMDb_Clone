@@ -236,8 +236,8 @@ async function append_list(pass, element) {
 }
 ```
 * This function is used to add(or append) favorite and watchList movies inside favorite and watchlist div ,and
-* and movie's id as key and ("W" for watchlist, "F" for favorite) value pair inside localStorage
-* first it check, is the movie already present in favorite or watchlist
+* add movie's id as key and ("W" for watchlist, "F" for favorite) value pair inside localStorage
+* first it check, is the movie already present in favorite or watchlist?
 * if not, only then it will call **create_and_append_list(** pass, element **)** function to append.
 
 ---
@@ -254,7 +254,7 @@ function fill_list() {
 }
 ```
 * this function will be called from **initialising()** function, when someone refresh or re-visit the page 
-* a for_loop will run and then is call **create_and_append_list()** with required arguments (i.e. **movie id** and **where to append**)
+* a for_loop will run and then it call **create_and_append_list()** with required arguments (i.e. **movie id** and **where to append**)
 
 ---
 > **handleClickListener(** event **)**
@@ -291,7 +291,7 @@ function searchFunction() {
 }
 ```
 * this function will be called when someone wants to search any movie
-* then is will call to another function **fill_category(** api, category **)** with arguments as what some enter in input-form
+* then it will call another function **fill_category(** api, category **)** with arguments as what some enter in input-form
 * basically, it will be called when a keyup event happens
 
 ---
@@ -338,8 +338,8 @@ async function initialising() {
     await fill_list();
 }
 ```
- * this function will be called once when some visit/refersh the page 
- * and then call **fill_category()** and **fill_list**
+ * this function will be called once when someone visit/refersh the page 
+ * and then call **fill_category()** and **fill_list**()
  to fill the page and favorite and watchlist.
 
 ---
