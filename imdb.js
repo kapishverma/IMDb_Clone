@@ -170,8 +170,10 @@ function handleClickListener(event) {
         return;
     }
 }
+
 // search ************************************
 function searchFunction() {
+    if(search_result.classList.contains('off')) return;
     search_result.innerHTML = "";
     fill_category(api_search + input.value, search_result);
 }
@@ -182,7 +184,6 @@ input.addEventListener('click', () => {
     watch_btn.classList.remove("active_list");
     WatchList.classList.remove("on");
     search_result.classList.toggle('off');
-
 })
 
 fav_btn.addEventListener('click', () => {
@@ -191,6 +192,7 @@ fav_btn.addEventListener('click', () => {
     watch_btn.classList.remove("active_list");
     WatchList.classList.remove("on");
     search_result.classList.add('off');
+    search_result.innerHTML = "";
 })
 
 watch_btn.addEventListener('click', () => {
@@ -199,11 +201,13 @@ watch_btn.addEventListener('click', () => {
     fav_btn.classList.remove("active_list");
     Favorite_list.classList.remove("on");
     search_result.classList.add('off');
+    search_result.innerHTML = "";
 })
 document.addEventListener('keyup', searchFunction);
 document.addEventListener('click', handleClickListener);
 
 // initialising home page*************************************************************
+
 async function initialising() {
     await fill_category(api_popular_movies, popular_movies);
     await fill_category(api_top_rated_movies, top_rated_movies);
@@ -213,7 +217,9 @@ async function initialising() {
 }
 
 // check is home or movie detail page*************************************************
+
 var queryString = location.search.substring(1);
+
 if (queryString !== "") {  // means movie page
     fill_the_details(queryString);
     fill_list();
