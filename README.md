@@ -354,5 +354,5 @@ if (queryString !== "") {  // means movie page
     initialising();  // home page
 }
 ```
-* here just if-else condition to check wether it is a Home_page or Movie_page.
+* here just if-else condition to check whether it is a Home_page or Movie_page.
 
