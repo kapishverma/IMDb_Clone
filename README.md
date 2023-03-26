@@ -141,7 +141,7 @@ async function create_and_append_list(pass, element) {
 * Two arguments are passed inside this function
   1. **pass**  (movie id)
   1. **element** (where to append)
-* just fetching details from api using **pass** 
+* just fetching details using api( **pass** )
 * adding key-value pair inside localStorage
 * creating element with fatched details
 * and then appending
@@ -356,5 +356,3 @@ if (queryString !== "") {  // means movie page
 ```
 * here just if-else condition to check wether it is a Home_page or Movie_page.
 
----
->  __You can see every event in__ **Console**
