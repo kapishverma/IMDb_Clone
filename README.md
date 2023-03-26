@@ -285,6 +285,7 @@ function handleClickListener(event) {
 ```javascript
 // search
 function searchFunction() {
+    if(search_result.classList.contains('off')) return;
     search_result.innerHTML = "";
     fill_category(api_search + input.value, search_result);
 }
@@ -303,7 +304,6 @@ input.addEventListener('click', () => {
     watch_btn.classList.remove("active_list");
     WatchList.classList.remove("on");
     search_result.classList.toggle('off');
-
 })
 
 fav_btn.addEventListener('click', () => {
@@ -312,6 +312,7 @@ fav_btn.addEventListener('click', () => {
     watch_btn.classList.remove("active_list");
     WatchList.classList.remove("on");
     search_result.classList.add('off');
+    search_result.innerHTML = "";
 })
 
 watch_btn.addEventListener('click', () => {
@@ -320,6 +321,7 @@ watch_btn.addEventListener('click', () => {
     fav_btn.classList.remove("active_list");
     Favorite_list.classList.remove("on");
     search_result.classList.add('off');
+    search_result.innerHTML = "";
 })
 document.addEventListener('keyup', searchFunction);
 document.addEventListener('click', handleClickListener);
